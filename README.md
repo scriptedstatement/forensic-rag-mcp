@@ -207,10 +207,7 @@ rag-mcp/
 │   ├── chroma/        # ChromaDB vector store
 │   ├── sources/       # Cached online source JSONL
 │   └── *.json         # State files
-├── knowledge/         # User documents (watched folder)
-│   ├── CTI/           # Curated threat intel JSONL
-│   ├── pdfs/          # Source PDFs for extraction
-│   └── training/      # Training materials
+├── knowledge/         # User documents - .txt, .md, .json, .jsonl (watched folder)
 └── tests/             # Test suite
 ```
 

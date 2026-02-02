@@ -18,18 +18,13 @@ data/sources/
 data/*.json
 
 # =============================================================================
-# User content (structure preserved via .gitkeep)
+# User content (users create their own, only .gitkeep tracked)
 # =============================================================================
-# PDFs (copyrighted, not distributed)
-knowledge/**/*.pdf
-
-# Extracted/processed content (users create their own)
-knowledge/**/*.jsonl
-knowledge/**/*.txt
-knowledge/**/*.md
-knowledge/**/EXTRACTION_STATUS.md
-knowledge/**/QA_REPORT.md
-!knowledge/**/.gitkeep
+knowledge/*.jsonl
+knowledge/*.json
+knowledge/*.txt
+knowledge/*.md
+!knowledge/.gitkeep
 
 # =============================================================================
 # Caches
