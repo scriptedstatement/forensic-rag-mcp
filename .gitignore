@@ -20,10 +20,11 @@ data/*.json
 # =============================================================================
 # User content (users create their own, only .gitkeep tracked)
 # =============================================================================
-knowledge/*.jsonl
-knowledge/*.json
-knowledge/*.txt
-knowledge/*.md
+knowledge/**/*.jsonl
+knowledge/**/*.json
+knowledge/**/*.txt
+knowledge/**/*.md
+knowledge/**/*.pdf
 !knowledge/.gitkeep
 
 # =============================================================================
