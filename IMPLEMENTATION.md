@@ -14,7 +14,7 @@ Technical details for developers and contributors.
 │  │              │    │                  │    │                          │  │
 │  │  - search    │    │  - load()        │    │  Collection: ir_knowledge│  │
 │  │  - list_src  │    │  - search()      │    │  ~22K documents          │  │
-│  │  - get_stats │    │  - get_stats()   │    │  22 online sources       │  │
+│  │  - get_stats │    │  - get_stats()   │    │  23 online sources       │  │
 │  └──────────────┘    └──────────────────┘    └──────────────────────────┘  │
 │                              │                                              │
 │                    ┌─────────▼─────────┐                                   │
@@ -67,9 +67,9 @@ Technical details for developers and contributors.
 - Loads configurable thresholds from tuning_config.json
 
 ### sources.py - Online Source Management
-- 22 source configurations (repo, branch, parser)
+- 23 source configurations (repo, branch, parser)
 - GitHub API integration (commits, releases, feeds)
-- Parser functions for each source format (22 parsers)
+- Parser functions for each source format (23 parsers)
 - State management (versions, sync timestamps)
 - **Network hardening**: HTTPS-only, size limits, host allowlist, SSRF protection
 - **Retry logic**: Exponential backoff with jitter for transient failures
@@ -228,7 +228,7 @@ SourceConfig(
 Each parser takes `(repo_dir, output_path)` and returns record count.
 Outputs JSONL with `{text, metadata}` per line.
 
-## Online Sources (22)
+## Online Sources (23)
 
 | Source | Type | Description |
 |--------|------|-------------|
@@ -253,6 +253,7 @@ Outputs JSONL with `{text, metadata}` per line.
 | mitre_car | github_commits | MITRE CAR Analytics (~100) |
 | stratus_red_team | github_releases | Cloud Attack Techniques (~80) |
 | mitre_atlas | github_commits | ATLAS AI/ML Attacks (~50) |
+| mitre_engage | github_commits | MITRE Engage Adversary Engagement (~45) |
 | forensic_clarifications | static | Authoritative Forensic Artifact Clarifications (5) |
 
 ## State Files

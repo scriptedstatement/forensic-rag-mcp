@@ -1,12 +1,13 @@
 """
 Online Source Management - Fetch, parse, and cache authoritative sources.
 
-Manages 18 authoritative upstream sources:
-- Detection rules: Sigma, Elastic, Splunk
-- Attack frameworks: MITRE ATT&CK, MITRE CAR, MITRE D3FEND, MITRE ATLAS, Atomic Red Team, Stratus
+Manages 23 authoritative upstream sources:
+- Detection rules: Sigma, Elastic, Splunk, Chainsaw, Hayabusa
+- Attack frameworks: MITRE ATT&CK, MITRE CAR, MITRE D3FEND, MITRE ATLAS, MITRE Engage, CAPEC, MBC
+- Red team: Atomic Red Team, Stratus Red Team
 - Forensic artifacts: ForensicArtifacts, KAPE, Velociraptor
 - LOLBins: LOLBAS, GTFOBins, HijackLibs, LOLDrivers
-- Threat intel: CISA KEV, EVTX Attack Samples
+- Threat intel: CISA KEV
 """
 
 from __future__ import annotations
@@ -78,7 +79,7 @@ class SourceStatus:
 
 
 # =============================================================================
-# Source Registry (18 sources + CAPEC)
+# Source Registry (23 sources)
 # =============================================================================
 
 SOURCES: dict[str, SourceConfig] = {
@@ -219,6 +220,15 @@ SOURCES: dict[str, SourceConfig] = {
         branch="main",
         parser="parse_atlas",
         paths=["data/"]
+    ),
+    "mitre_engage": SourceConfig(
+        name="mitre_engage",
+        description="MITRE Engage Adversary Engagement Framework",
+        source_type="github_commits",
+        repo="mitre/engage",
+        branch="main",
+        parser="parse_engage",
+        paths=["Data/json/"]
     ),
     "loldrivers": SourceConfig(
         name="loldrivers",
@@ -1652,6 +1662,127 @@ References:
     return len(records)
 
 
+def parse_engage(repo_dir: Path, output_path: Path) -> int:
+    """Parse MITRE Engage adversary engagement framework."""
+    records = []
+    json_dir = repo_dir / "Data" / "json"
+
+    if not json_dir.exists():
+        logger.warning(f"Engage data directory not found: {json_dir}")
+        return 0
+
+    # Load ATT&CK mappings for cross-reference (maps Engage activity ID -> ATT&CK techniques)
+    attack_mappings = {}
+    attack_mapping_file = json_dir / "attack_mapping.json"
+    if attack_mapping_file.exists():
+        try:
+            with open(attack_mapping_file, encoding="utf-8") as f:
+                attack_data = json.load(f)
+                # attack_mapping.json is a list with attack_id -> eac_id mappings
+                # We need to reverse this: eac_id -> list of attack_ids
+                for mapping in attack_data:
+                    activity_id = mapping.get("eac_id", "")
+                    attack_id = mapping.get("attack_id", "")
+                    if activity_id and attack_id:
+                        if activity_id not in attack_mappings:
+                            attack_mappings[activity_id] = set()
+                        attack_mappings[activity_id].add(attack_id)
+                # Convert sets to sorted lists
+                attack_mappings = {k: sorted(v) for k, v in attack_mappings.items()}
+        except Exception as e:
+            logger.debug(f"Error loading attack mappings: {e}")
+
+    # Parse activities (dict keyed by Engage ID)
+    activities_file = json_dir / "activity_details.json"
+    if activities_file.exists():
+        try:
+            with open(activities_file, encoding="utf-8") as f:
+                activities = json.load(f)
+
+            for activity_id, activity in activities.items():
+                techniques = attack_mappings.get(activity_id, [])
+                techniques_str = ", ".join(techniques) if techniques else ""
+
+                text = f"""MITRE Engage Activity: {activity.get('name', 'Unknown')}
+
+Engage ID: {activity_id}
+Description: {activity.get('description', 'No description')}
+
+Long Description: {activity.get('long_description', '')}
+
+ATT&CK Techniques: {techniques_str if techniques_str else 'None mapped'}
+"""
+                records.append({
+                    "text": text,
+                    "metadata": {
+                        "source": "mitre_engage",
+                        "title": activity.get("name", ""),
+                        "engage_id": activity_id,
+                        "type": "activity",
+                        "mitre_techniques": techniques_str
+                    }
+                })
+        except Exception as e:
+            logger.debug(f"Error parsing activities: {e}")
+
+    # Parse approaches (dict keyed by Engage ID)
+    approaches_file = json_dir / "approach_details.json"
+    if approaches_file.exists():
+        try:
+            with open(approaches_file, encoding="utf-8") as f:
+                approaches = json.load(f)
+
+            for approach_id, approach in approaches.items():
+                text = f"""MITRE Engage Approach: {approach.get('name', 'Unknown')}
+
+Engage ID: {approach_id}
+Description: {approach.get('description', 'No description')}
+
+Long Description: {approach.get('long_description', '')}
+"""
+                records.append({
+                    "text": text,
+                    "metadata": {
+                        "source": "mitre_engage",
+                        "title": approach.get("name", ""),
+                        "engage_id": approach_id,
+                        "type": "approach"
+                    }
+                })
+        except Exception as e:
+            logger.debug(f"Error parsing approaches: {e}")
+
+    # Parse goals (dict keyed by Engage ID)
+    goals_file = json_dir / "goal_details.json"
+    if goals_file.exists():
+        try:
+            with open(goals_file, encoding="utf-8") as f:
+                goals = json.load(f)
+
+            for goal_id, goal in goals.items():
+                text = f"""MITRE Engage Goal: {goal.get('name', 'Unknown')}
+
+Engage ID: {goal_id}
+Description: {goal.get('description', 'No description')}
+
+Long Description: {goal.get('long_description', '')}
+"""
+                records.append({
+                    "text": text,
+                    "metadata": {
+                        "source": "mitre_engage",
+                        "title": goal.get("name", ""),
+                        "engage_id": goal_id,
+                        "type": "goal"
+                    }
+                })
+        except Exception as e:
+            logger.debug(f"Error parsing goals: {e}")
+
+    _write_jsonl(records, output_path)
+    return len(records)
+
+
 def parse_loldrivers(repo_dir: Path, output_path: Path) -> int:
     """Parse LOLDrivers vulnerable/malicious driver database."""
     records = []
@@ -2123,6 +2254,7 @@ PARSERS: dict[str, Callable[[Path, Path], int]] = {
     "parse_kape": parse_kape,
     "parse_velociraptor": parse_velociraptor,
     "parse_atlas": parse_atlas,
+    "parse_engage": parse_engage,
     "parse_loldrivers": parse_loldrivers,
     "parse_capec": parse_capec,
     "parse_mbc": parse_mbc,

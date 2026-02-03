@@ -1,6 +1,6 @@
 # RAG-MCP: Incident Response Knowledge Server
 
-MCP server providing semantic search over 22K+ incident response knowledge records from 22 authoritative security sources.
+MCP server providing semantic search over 22K+ incident response knowledge records from 23 authoritative security sources.
 
 ## Quick Start
 
@@ -20,7 +20,7 @@ python -m rag_mcp.server
 
 ## Features
 
-- **22 Online Sources**: Auto-synced from authoritative security repositories
+- **23 Online Sources**: Auto-synced from authoritative security repositories
 - **Semantic Search**: BGE embeddings with ChromaDB vector store
 - **MCP Integration**: Tools for Claude Code (search, list_sources, get_stats)
 - **User Documents**: Add your own knowledge via watched folder or one-time ingest
@@ -52,6 +52,7 @@ python -m rag_mcp.server
 | stratus_red_team | Cloud Attack Techniques | ~80 |
 | mbc | MITRE MBC Malware Behavior Catalog | ~650 |
 | mitre_atlas | MITRE ATLAS AI/ML Attack Framework | ~50 |
+| mitre_engage | MITRE Engage Adversary Engagement | ~45 |
 | chainsaw | Chainsaw Forensic Detection Rules | ~110 |
 | hayabusa | Hayabusa Built-in Detection Rules | ~190 |
 | forensic_clarifications | Authoritative Forensic Artifact Clarifications | 5 |
@@ -194,7 +195,7 @@ rag-mcp/
 ├── src/rag_mcp/
 │   ├── server.py      # MCP server
 │   ├── index.py       # Search engine wrapper
-│   ├── sources.py     # Online source management (22 sources)
+│   ├── sources.py     # Online source management (23 sources)
 │   ├── ingest.py      # User document processing
 │   ├── build.py       # Full index builder
 │   ├── refresh.py     # Incremental updates
