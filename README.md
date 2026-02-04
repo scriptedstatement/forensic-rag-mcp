@@ -2,9 +2,39 @@
 
 MCP server providing semantic search over 22K+ incident response knowledge records from 23 authoritative security sources.
 
-## Quick Start
+> **Note:** This is a proof-of-concept project for exploring AI-assisted incident response capabilities. Not intended for production use without additional validation and hardening appropriate to your environment.
+
+## Installation Options
+
+### Option A: As Part of Claude-IR (Recommended)
+
+This MCP is designed as a component of the [Claude-IR](https://github.com/scriptedstatement/claude-ir) AI-assisted incident response workstation.
 
 ```bash
+git clone https://github.com/scriptedstatement/claude-ir.git
+cd claude-ir
+claude
+# Then type: read and follow docs/SETUP_GUIDE.md
+```
+
+**Benefits of Claude-IR installation:**
+- Guided setup with component selection
+- Pre-configured MCP integration
+- Works alongside forensic-triage-mcp (file validation) and opencti-mcp (threat intel)
+- Forensic discipline rules and investigation workflows
+
+### Option B: Standalone Installation
+
+Use standalone when you only need RAG search without the full IR workstation.
+
+```bash
+git clone https://github.com/scriptedstatement/forensic-rag-mcp.git
+cd forensic-rag-mcp
+
+# Create virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
 # Install dependencies
 pip install -e .
 
@@ -17,6 +47,8 @@ python -m rag_mcp.status
 # Run MCP server (for Claude Code integration)
 python -m rag_mcp.server
 ```
+
+**For detailed setup options (online sources vs. custom content):** See `SETUP.md`
 
 ## Features
 
