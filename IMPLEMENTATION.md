@@ -33,7 +33,7 @@ Technical details for developers and contributors.
 │  ┌────────────────┐   ┌────────────────┐   ┌────────────────────────────┐  │
 │  │   sources.py   │   │   build.py     │   │       refresh.py           │  │
 │  │                │   │                │   │                            │  │
-│  │  22 online     │──▶│  Full rebuild  │   │  Incremental updates       │  │
+│  │  23 online     │──▶│  Full rebuild  │   │  Incremental updates       │  │
 │  │  sources       │   │  (5 min)       │   │  (seconds)                 │  │
 │  │                │   │                │   │                            │  │
 │  │  - Fetch       │   └────────────────┘   └────────────────────────────┘  │

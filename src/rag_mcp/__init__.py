@@ -1,12 +1,12 @@
 """
 RAG MCP Server - Semantic search over IR knowledge base.
 
-This package provides an MCP server for semantic search across 22K+
-incident response knowledge records from 22 authoritative online sources
+This package provides an MCP server for semantic search across
+incident response knowledge from 23 authoritative online sources
 plus user-provided documents.
 
 Architecture:
-    - 22 online sources (Sigma, MITRE ATT&CK, Atomic Red Team, etc.)
+    - 23 online sources (Sigma, MITRE ATT&CK, Atomic Red Team, etc.)
     - User documents via knowledge/ folder (auto-watched)
     - One-time document ingestion with friendly names
     - ChromaDB vector store with BGE embeddings
@@ -16,7 +16,7 @@ Architecture:
 Modules:
     server: MCP server exposing search, list_sources, get_stats tools
     index: ChromaDB and embedding model wrapper
-    sources: Online source management (22 authoritative sources)
+    sources: Online source management (23 authoritative sources)
     ingest: User document ingestion (watched and one-time)
     build: Full index builder
     refresh: Incremental index updates
