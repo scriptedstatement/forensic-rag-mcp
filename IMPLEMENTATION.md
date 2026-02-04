@@ -13,7 +13,7 @@ Technical details for developers and contributors.
 │  │  (server.py) │    │    (index.py)    │    │   (data/chroma/)         │  │
 │  │              │    │                  │    │                          │  │
 │  │  - search    │    │  - load()        │    │  Collection: ir_knowledge│  │
-│  │  - list_src  │    │  - search()      │    │  ~22K documents          │  │
+│  │  - list_src  │    │  - search()      │    │  23 online sources        │  │
 │  │  - get_stats │    │  - get_stats()   │    │  23 online sources       │  │
 │  └──────────────┘    └──────────────────┘    └──────────────────────────┘  │
 │                              │                                              │

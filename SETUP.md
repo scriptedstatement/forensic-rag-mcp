@@ -9,7 +9,7 @@ This guide helps you set up the forensic knowledge RAG index. Claude should walk
 ### Question 1: Do you want online sources only, or also add custom content?
 
 **Option A: Online Sources Only (Recommended for most users)**
-- 23 authoritative sources with ~22,000 records
+- 23 authoritative sources
 - Includes: MITRE ATT&CK, Sigma rules, Atomic Red Team, KAPE, LOLDrivers, and more
 - No additional work required - just run the build command
 

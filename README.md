@@ -1,6 +1,6 @@
 # RAG-MCP: Incident Response Knowledge Server
 
-MCP server providing semantic search over 22K+ incident response knowledge records from 23 authoritative security sources.
+MCP server providing semantic search over incident response knowledge from 23 authoritative security sources.
 
 > **Note:** This is a proof-of-concept project for exploring AI-assisted incident response capabilities. Not intended for production use without additional validation and hardening appropriate to your environment.
 
