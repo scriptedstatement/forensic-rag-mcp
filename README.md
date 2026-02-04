@@ -165,11 +165,11 @@ Add to your MCP configuration (e.g., `.claude/mcp.json`):
 {
   "mcpServers": {
     "rag-knowledge": {
-      "command": "/path/to/rag-mcp/venv/bin/python",
+      "command": "/path/to/forensic-rag-mcp/.venv/bin/python",
       "args": ["-m", "rag_mcp.server"],
-      "cwd": "/path/to/rag-mcp",
+      "cwd": "/path/to/forensic-rag-mcp",
       "env": {
-        "PYTHONPATH": "/path/to/rag-mcp/src"
+        "PYTHONPATH": "/path/to/forensic-rag-mcp/src"
       }
     }
   }
