@@ -567,8 +567,8 @@ ALLOWED_URL_HOSTS = frozenset({
     "atlas.mitre.org",
 })
 
-# Security: Maximum download size (25 MB default)
-MAX_DOWNLOAD_BYTES = int(os.environ.get("RAG_MAX_DOWNLOAD_BYTES", 25 * 1024 * 1024))
+# Security: Maximum download size (60 MB default - MITRE ATT&CK STIX is ~50MB)
+MAX_DOWNLOAD_BYTES = int(os.environ.get("RAG_MAX_DOWNLOAD_BYTES", 60 * 1024 * 1024))
 
 # Security: Only allow HTTPS by default (set RAG_ALLOW_HTTP=1 to enable HTTP)
 HTTPS_ONLY = os.environ.get("RAG_ALLOW_HTTP", "").lower() not in ("1", "true", "yes")

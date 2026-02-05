@@ -139,7 +139,7 @@ def get_config(reload: bool = False) -> Config:
     # Limits
     max_top_k = int(os.environ.get("RAG_MAX_TOP_K", "100"))
     max_query_length = int(os.environ.get("RAG_MAX_QUERY_LENGTH", "1000"))
-    max_download_bytes = int(os.environ.get("RAG_MAX_DOWNLOAD_BYTES", str(25 * 1024 * 1024)))
+    max_download_bytes = int(os.environ.get("RAG_MAX_DOWNLOAD_BYTES", str(60 * 1024 * 1024)))
     fetch_max_retries = int(os.environ.get("RAG_FETCH_MAX_RETRIES", "3"))
 
     # Security
