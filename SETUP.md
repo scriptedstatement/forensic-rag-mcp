@@ -6,21 +6,25 @@ This guide helps you set up the forensic knowledge RAG index. Claude should walk
 
 ## Decision Tree
 
-### Question 1: Do you want online sources only, or also add custom content?
+### Question 1: Which knowledge sources do you want?
 
-**Option A: Online Sources Only (Recommended for most users)**
-- 23 authoritative sources
-- Includes: MITRE ATT&CK, Sigma rules, Atomic Red Team, KAPE, LOLDrivers, and more
+**Option A: Online + Bundled Reference Content**
+- 23 online sources (MITRE ATT&CK, Sigma rules, Atomic Red Team, KAPE, LOLDrivers, etc.)
+- Bundled SANS and AppliedIR reference content (44 JSONL files shipped with repo)
 - No additional work required - just run the build command
 
-**Option B: Online Sources + Custom Content**
+**Option B: Online Sources Only**
+- 23 online sources, skip the bundled SANS/AppliedIR content
+- Use `--no-bundled` flag
+
+**Option C: Online + Bundled + Your Own Content (Recommended)**
 - Everything from Option A, plus your own documents
-- Requires extracting your documents to JSONL format
-- Good for: SANS posters, books, internal playbooks, CTI reports
+- Add your JSONL/TXT/MD files to `knowledge/` after building
+- Then run `python -m rag_mcp.refresh` to ingest them
 
 ---
 
-## Option A: Build with Online Sources Only
+## Option A: Build with Online + Bundled Content (Default)
 
 **Note:** These commands assume you're in the parent directory containing `forensic-rag-mcp/`. If you're already inside `forensic-rag-mcp/`, skip the `cd` command.
 
@@ -32,7 +36,7 @@ python -m rag_mcp.build
 
 **What this does:**
 1. Downloads 23 knowledge sources from GitHub (MITRE, Sigma, etc.)
-2. Parses each source into searchable records
+2. Processes bundled SANS and AppliedIR reference content from `knowledge/`
 3. Augments text with MITRE technique names for better search
 4. Creates ChromaDB vector index in `data/chroma/`
 
@@ -46,11 +50,23 @@ python -m rag_mcp.status
 
 ---
 
-## Option B: Add Custom Content
+## Option B: Build without Bundled Content
 
-### Step 1: Build Online Sources First
+```bash
+cd forensic-rag-mcp
+source .venv/bin/activate
+python -m rag_mcp.build --no-bundled
+```
 
-Run Option A above to establish the base index.
+This skips directories in `knowledge/` that contain a `.bundled` marker (AppliedIR, SANS) while still processing any user-added content.
+
+---
+
+## Option C: Add Custom Content
+
+### Step 1: Build First
+
+Run Option A or B above to establish the base index.
 
 ### Step 2: Understand Supported Formats
 
@@ -67,15 +83,13 @@ Run Option A above to establish the base index.
 
 ```
 knowledge/
-├── pdfs/           # Source PDFs + extracted JSONL (paired)
-│   ├── SANS/       # SANS posters
-│   ├── AIR/        # Applied Incident Response materials
-│   └── [your-org]/ # Your materials
-├── CTI/            # Curated threat intel (JSONL only)
-└── training/       # Training materials (JSONL only)
+├── AppliedIR/      # Bundled: Applied Incident Response (shipped with repo)
+├── SANS/           # Bundled: SANS cheat sheets & posters (shipped with repo)
+├── [your-org]/     # Your own JSONL/TXT/MD files
+└── CTI/            # Curated threat intel (JSONL only)
 ```
 
-**Rule:** JSONL files go next to their source PDFs with the same basename.
+Place your files in any subdirectory under `knowledge/`. Subdirectories with a `.bundled` marker are skipped when using `--no-bundled`.
 
 ### Step 4: Extract PDFs to JSONL
 
@@ -165,6 +179,15 @@ python -m rag_mcp.build --skip-online
 ```
 
 Rebuilds using only cached source data (useful offline).
+
+### Skip Bundled Content
+
+```bash
+python -m rag_mcp.build --no-bundled
+python -m rag_mcp.refresh --no-bundled
+```
+
+Skips bundled reference content (AppliedIR, SANS). Use your own knowledge files without the bundled ones.
 
 ---
 
