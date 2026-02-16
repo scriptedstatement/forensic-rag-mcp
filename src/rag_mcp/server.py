@@ -138,7 +138,7 @@ class RAGServer:
                 Tool(
                     name="search",
                     description=(
-                        "Semantic search across 23K+ incident response knowledge records."
+                        "Semantic search across 23K+ incident response knowledge records. "
                         "Sources include: Sigma rules, MITRE ATT&CK, Atomic Red Team, "
                         "Splunk Security, KAPE, Velociraptor, LOLBAS, GTFOBins, and more. "
                         "Returns ranked results with relevance scores (0-1, higher is better). "

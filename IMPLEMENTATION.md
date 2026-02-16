@@ -400,7 +400,7 @@ Sentinel-based deletion guards prevent accidental data loss:
 All network fetches in `sources.py` include:
 
 1. **HTTPS-Only**: HTTP URLs rejected by default (configurable via `RAG_ALLOW_HTTP`)
-2. **Size Limits**: Downloads capped at 25MB (`RAG_MAX_DOWNLOAD_BYTES`)
+2. **Size Limits**: Downloads capped at 60MB (`RAG_MAX_DOWNLOAD_BYTES`)
 3. **Host Allowlist**: Only approved hosts (github.com, raw.githubusercontent.com, etc.)
 4. **IP Literal Blocking**: Direct IP addresses blocked to prevent SSRF
 5. **Redirect Validation**: Redirect targets validated against host allowlist

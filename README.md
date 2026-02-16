@@ -218,9 +218,12 @@ Settings are loaded via `Config` dataclass (`config.py`) with an explicit `valid
 | `RAG_KNOWLEDGE_DIR` | `./knowledge` | User documents |
 | `RAG_MODEL_NAME` | `BAAI/bge-base-en-v1.5` | Embedding model |
 | `GITHUB_TOKEN` | (optional) | Higher API rate limits (see Security section) |
-| `RAG_MAX_DOWNLOAD_BYTES` | `26214400` (25MB) | Maximum download size for network fetches |
+| `RAG_MAX_DOWNLOAD_BYTES` | `62914560` (60MB) | Maximum download size for network fetches |
 | `RAG_ALLOW_HTTP` | `false` | Allow HTTP (not recommended; HTTPS enforced by default) |
 | `RAG_FETCH_MAX_RETRIES` | `3` | Max retries for transient network failures |
+| `RAG_MAX_TOP_K` | `100` | Maximum top_k for queries |
+| `RAG_MAX_QUERY_LENGTH` | `1000` | Maximum query string length |
+| `RAG_LOG_FORMAT` | `text` | Log format: "text" or "json" |
 
 ## Project Structure
 
@@ -437,7 +440,7 @@ All network fetches include multiple security layers:
 | Protection | Description |
 |------------|-------------|
 | **HTTPS-only** | HTTP URLs rejected by default (configurable) |
-| **Size limits** | Downloads capped at 25MB to prevent resource exhaustion |
+| **Size limits** | Downloads capped at 60MB to prevent resource exhaustion |
 | **Host allowlist** | Only approved hosts (github.com, raw.githubusercontent.com, etc.) |
 | **IP literal blocking** | Direct IP addresses blocked to prevent SSRF |
 | **Redirect validation** | Redirect targets must be on allowlist |
