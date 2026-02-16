@@ -210,6 +210,8 @@ Add to your MCP configuration (e.g., `.claude/mcp.json`):
 
 ## Configuration
 
+Settings are loaded via `Config` dataclass (`config.py`) with an explicit `validate()` method and global singleton caching in `get_config()`. Set `RAG_LOG_FORMAT=json` for structured JSON logging.
+
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `RAG_INDEX_DIR` | `./data` | ChromaDB location |

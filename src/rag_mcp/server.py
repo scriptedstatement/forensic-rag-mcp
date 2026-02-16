@@ -32,6 +32,9 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import os
+import sys
+from datetime import datetime, timezone
 from typing import Any
 
 from mcp.server import Server
@@ -41,12 +44,58 @@ from mcp.types import TextContent, Tool
 from .index import RAGIndex
 from .utils import MAX_TOP_K
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
 logger = logging.getLogger(__name__)
+
+
+class _StructuredFormatter(logging.Formatter):
+    """JSON log formatter for structured logging."""
+
+    def __init__(self, service_name: str = "rag-mcp") -> None:
+        super().__init__()
+        self.service_name = service_name
+
+    def format(self, record: logging.LogRecord) -> str:
+        log_data: dict[str, Any] = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "level": record.levelname,
+            "logger": record.name,
+            "message": record.getMessage(),
+            "service": self.service_name,
+        }
+        if record.levelno >= logging.WARNING:
+            log_data["location"] = {
+                "file": record.pathname,
+                "line": record.lineno,
+                "function": record.funcName,
+            }
+        if record.exc_info and record.exc_info[0]:
+            log_data["exception"] = {
+                "type": record.exc_info[0].__name__,
+                "message": str(record.exc_info[1]) if record.exc_info[1] else None,
+            }
+        return json.dumps(log_data, default=str)
+
+
+def _setup_logging(level: int = logging.INFO, json_format: bool = False) -> None:
+    """Configure logging with optional JSON format.
+
+    Args:
+        level: Logging level
+        json_format: Use JSON formatting (set RAG_LOG_FORMAT=json)
+    """
+    pkg_logger = logging.getLogger("rag_mcp")
+    pkg_logger.setLevel(level)
+    pkg_logger.handlers.clear()
+    handler = logging.StreamHandler(sys.stderr)
+    handler.setLevel(level)
+    if json_format:
+        handler.setFormatter(_StructuredFormatter())
+    else:
+        handler.setFormatter(logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        ))
+    pkg_logger.addHandler(handler)
+    pkg_logger.propagate = False
 
 # Input validation constants
 MAX_QUERY_LENGTH = 1000
@@ -71,6 +120,14 @@ class RAGServer:
         self.server = Server("rag-knowledge")
         self.index = RAGIndex()
         self._register_tools()
+
+    @staticmethod
+    def _error_response(error_code: str, message: str) -> list[TextContent]:
+        """Format error response consistently."""
+        return [TextContent(
+            type="text",
+            text=json.dumps({"error": error_code, "message": message})
+        )]
 
     def _register_tools(self) -> None:
         """Register MCP tools."""
@@ -171,17 +228,14 @@ class RAGServer:
                 )]
 
             except ValueError as e:
-                # Input validation errors
-                return [TextContent(
-                    type="text",
-                    text=json.dumps({"error": str(e)})
-                )]
+                logger.warning(f"Tool {name} validation failed: {e}")
+                return self._error_response("validation_error", str(e))
             except Exception as e:
-                logger.exception(f"Error in tool {name}")
-                return [TextContent(
-                    type="text",
-                    text=json.dumps({"error": "Internal server error"})
-                )]
+                logger.exception(f"Tool {name} internal error")
+                return self._error_response(
+                    "internal_error",
+                    "An unexpected error occurred. Check server logs."
+                )
 
     async def _search(self, arguments: dict[str, Any]) -> dict[str, Any]:
         """
@@ -295,6 +349,8 @@ class RAGServer:
 
 def main() -> None:
     """Entry point."""
+    log_format = os.getenv("RAG_LOG_FORMAT", "text").lower()
+    _setup_logging(json_format=(log_format == "json"))
     server = RAGServer()
     asyncio.run(server.run())
 
