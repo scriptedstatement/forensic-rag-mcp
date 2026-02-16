@@ -31,8 +31,10 @@ knowledge/**/*.pdf
 # =============================================================================
 !knowledge/AppliedIR/
 !knowledge/AppliedIR/*.jsonl
+!knowledge/AppliedIR/.bundled
 !knowledge/SANS/
 !knowledge/SANS/*.jsonl
+!knowledge/SANS/.bundled
 
 # =============================================================================
 # Caches

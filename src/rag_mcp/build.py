@@ -83,6 +83,7 @@ class BuildResult:
 def build(
     force_fetch: bool = False,
     skip_online: bool = False,
+    no_bundled: bool = False,
     dry_run: bool = False,
     data_dir: Optional[Path] = None,
     knowledge_dir: Optional[Path] = None,
@@ -94,6 +95,7 @@ def build(
     Args:
         force_fetch: Re-fetch all online sources regardless of cache
         skip_online: Only process user documents (offline mode)
+        no_bundled: Skip bundled reference content (AppliedIR, SANS)
         dry_run: Report what would be built without building
 
     Returns:
@@ -172,7 +174,10 @@ def build(
     logger.info("Phase 2: User Documents (knowledge/)")
     logger.info("=" * 60)
 
-    scan = scan_knowledge_folder(knowledge_dir)
+    scan = scan_knowledge_folder(knowledge_dir, skip_bundled=no_bundled)
+
+    if no_bundled:
+        logger.info("  (bundled content skipped: --no-bundled)")
 
     # Report unsupported files
     for path, message in scan.unsupported:
@@ -413,6 +418,8 @@ def main() -> int:
                         help="Re-fetch all online sources")
     parser.add_argument("--skip-online", action="store_true",
                         help="Only process user documents")
+    parser.add_argument("--no-bundled", action="store_true",
+                        help="Skip bundled reference content (AppliedIR, SANS)")
     parser.add_argument("--dry-run", action="store_true",
                         help="Show what would be built")
     parser.add_argument("--data-dir", type=Path,
@@ -424,6 +431,7 @@ def main() -> int:
     result = build(
         force_fetch=args.force_fetch,
         skip_online=args.skip_online,
+        no_bundled=args.no_bundled,
         dry_run=args.dry_run,
         data_dir=args.data_dir,
         knowledge_dir=args.knowledge_dir

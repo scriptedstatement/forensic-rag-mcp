@@ -72,6 +72,7 @@ def refresh(
     check_only: bool = False,
     source_name: Optional[str] = None,
     skip_online: bool = False,
+    no_bundled: bool = False,
     data_dir: Optional[Path] = None,
     knowledge_dir: Optional[Path] = None,
     model_name: Optional[str] = None
@@ -83,6 +84,7 @@ def refresh(
         check_only: Report changes without applying
         source_name: Only refresh specific online source
         skip_online: Skip online sources (user docs only)
+        no_bundled: Skip bundled reference content (AppliedIR, SANS)
 
     Returns:
         RefreshResult with summary
@@ -153,7 +155,10 @@ def refresh(
     logger.info("Phase 2: Checking User Documents")
     logger.info("=" * 60)
 
-    changes = check_for_changes(knowledge_dir)
+    changes = check_for_changes(knowledge_dir, skip_bundled=no_bundled)
+
+    if no_bundled:
+        logger.info("  (bundled content skipped: --no-bundled)")
 
     # Report changes
     if changes.new:
@@ -232,7 +237,7 @@ def refresh(
     # =========================================================================
     # Phase 3: Check for unsupported files
     # =========================================================================
-    scan = scan_knowledge_folder(knowledge_dir)
+    scan = scan_knowledge_folder(knowledge_dir, skip_bundled=no_bundled)
     if scan.unsupported:
         logger.info("")
         logger.info("Warnings (unsupported files):")
@@ -413,6 +418,8 @@ def main() -> int:
                         help="Only refresh specific online source")
     parser.add_argument("--skip-online", action="store_true",
                         help="Skip online sources")
+    parser.add_argument("--no-bundled", action="store_true",
+                        help="Skip bundled reference content (AppliedIR, SANS)")
     parser.add_argument("--data-dir", type=Path,
                         help="Data directory")
     parser.add_argument("--knowledge-dir", type=Path,
@@ -423,6 +430,7 @@ def main() -> int:
         check_only=args.check_only,
         source_name=args.source,
         skip_online=args.skip_online,
+        no_bundled=args.no_bundled,
         data_dir=args.data_dir,
         knowledge_dir=args.knowledge_dir
     )

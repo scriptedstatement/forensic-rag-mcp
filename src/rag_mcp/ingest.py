@@ -44,6 +44,9 @@ REJECTION_MESSAGES = {
     ".odt": "File > Save As > Plain Text (.txt)",
 }
 
+# Bundled content marker (directories shipped with the repo)
+BUNDLED_MARKER = ".bundled"
+
 # Chunking settings
 CHUNK_TARGET = 1000  # Target characters per chunk
 CHUNK_MIN = 500      # Minimum chunk size
@@ -127,9 +130,27 @@ def validate_format(path: Path) -> tuple[bool, str]:
     return False, message
 
 
-def scan_knowledge_folder(folder: Optional[Path] = None) -> ScanResult:
+def _is_in_bundled_dir(path: Path, root: Path) -> bool:
+    """Check if a file is inside a directory marked with .bundled."""
+    # Walk from the file's parent up to (but not including) root
+    current = path.parent
+    while current != root and current != current.parent:
+        if (current / BUNDLED_MARKER).exists():
+            return True
+        current = current.parent
+    return False
+
+
+def scan_knowledge_folder(
+    folder: Optional[Path] = None,
+    skip_bundled: bool = False
+) -> ScanResult:
     """
     Scan folder for supported and unsupported files.
+
+    Args:
+        folder: Knowledge directory to scan
+        skip_bundled: If True, skip files in directories containing a .bundled marker
 
     Returns:
         ScanResult with lists of supported and unsupported files
@@ -143,8 +164,11 @@ def scan_knowledge_folder(folder: Optional[Path] = None) -> ScanResult:
 
     for path in folder.rglob("*"):
         if path.is_file():
-            # Skip hidden files (e.g., .gitkeep)
+            # Skip hidden files (e.g., .gitkeep, .bundled)
             if path.name.startswith("."):
+                continue
+            # Skip bundled content when requested
+            if skip_bundled and _is_in_bundled_dir(path, folder):
                 continue
             ok, message = validate_format(path)
             if ok:
@@ -465,9 +489,16 @@ def get_document_records(path: Path, source_prefix: str = "user") -> list[dict]:
 # Watched Documents (knowledge/ folder)
 # =============================================================================
 
-def check_for_changes(folder: Optional[Path] = None) -> ChangeSet:
+def check_for_changes(
+    folder: Optional[Path] = None,
+    skip_bundled: bool = False
+) -> ChangeSet:
     """
     Compare knowledge folder against state to find changes.
+
+    Args:
+        folder: Knowledge directory to scan
+        skip_bundled: If True, skip files in directories containing a .bundled marker
 
     Returns:
         ChangeSet with new, modified, and deleted files
@@ -481,7 +512,7 @@ def check_for_changes(folder: Optional[Path] = None) -> ChangeSet:
     deleted = []
 
     # Get current supported files
-    scan = scan_knowledge_folder(folder)
+    scan = scan_knowledge_folder(folder, skip_bundled=skip_bundled)
     current_files = set()
 
     for path in scan.supported:
