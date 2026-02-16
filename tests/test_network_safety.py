@@ -116,7 +116,7 @@ class TestDownloadSizeLimits:
         from rag_mcp.sources import MAX_DOWNLOAD_BYTES
 
         assert MAX_DOWNLOAD_BYTES > 0
-        assert MAX_DOWNLOAD_BYTES == 25 * 1024 * 1024  # 25 MB default
+        assert MAX_DOWNLOAD_BYTES == 60 * 1024 * 1024  # 60 MB default
 
     def test_content_length_check(self):
         """Content-Length exceeding limit is rejected early."""

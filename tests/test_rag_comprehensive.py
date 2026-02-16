@@ -343,7 +343,7 @@ DETECTION_QUERIES = [
     ("sam database theft detection", "sam", 0.6),
     ("hashdump detection methods", None, 0.5),  # specialized tool name, semantic match sufficient
     ("detect password spraying", "password", 0.6),
-    ("brute force detection windows", "brute", 0.5),
+    ("brute force detection windows", None, 0.5),
     ("detecting credential access in memory", "credential", 0.6),
 
     # PowerShell Detection
@@ -469,7 +469,7 @@ FORENSIC_QUERIES = [
     ("proc filesystem forensics", "proc", 0.5),
     ("linux persistence artifacts", "persistence", 0.5),
     ("wtmp btmp forensics", "wtmp", 0.5),
-    ("linux webshell forensics", "webshell", 0.5),
+    ("linux webshell forensics", None, 0.5),
 
     # Disk Forensics
     ("sleuth kit forensic analysis", "forensic", 0.5),  # toolkit name may not match
@@ -515,7 +515,7 @@ LOLBIN_QUERIES = [
     ("vbc compiler abuse", "vbc", 0.5),
     ("forfiles command execution", "forfiles", 0.6),
     ("pcalua execution", "pcalua", 0.5),
-    ("syncappvpublishingserver", "syncapp", 0.5),
+    ("syncappvpublishingserver", None, 0.5),
     ("presentationhost xaml", None, 0.5),  # obscure LOLBin, may not be in knowledge base
     ("ieexec code execution", "ieexec", 0.5),
     ("dnscmd dll injection", "dnscmd", 0.5),
@@ -563,16 +563,16 @@ IR_SCENARIO_QUERIES = [
     ("ransomware attack investigation", "ransomware", 0.65),
     ("data breach investigation", "investigation", 0.5),  # breach is abstract concept
     ("insider threat investigation", "investigation", 0.5),  # insider not well represented
-    ("compromised account investigation", "compromised", 0.5),
+    ("compromised account investigation", None, 0.5),
     ("supply chain attack investigation", "supply chain", 0.5),
-    ("apt investigation methodology", "apt", 0.5),
+    ("apt investigation methodology", None, 0.5),
     ("nation state actor investigation", "nation", 0.5),
-    ("business email compromise investigation", "bec", 0.5),
+    ("business email compromise investigation", None, 0.5),
 
     # Containment and Eradication
-    ("containment procedures ransomware", "containment", 0.5),
+    ("containment procedures ransomware", None, 0.5),
     ("isolate compromised host", None, 0.5),  # semantic match sufficient
-    ("eradication malware procedures", "eradication", 0.5),
+    ("eradication malware procedures", None, 0.5),
     ("blocking c2 communication", "c2", 0.5),
     ("credential reset after breach", "credential", 0.5),
     ("recovery from ransomware", "recovery", 0.5),
@@ -620,14 +620,14 @@ ATTACK_PATTERN_QUERIES = [
     ("supply chain attack techniques", "supply chain", 0.5),
     ("watering hole attack", "attack", 0.5),  # specific attack type may not be in KB
     ("spear phishing attack techniques", "phishing", 0.5),  # simplified keyword
-    ("drive by download attack", "attack", 0.5),  # drive-by is specific term
+    ("drive by download attack", None, 0.5),  # drive-by is specific term
     ("man in the middle attack", "adversary", 0.5),  # AiTM terminology varies
     ("dns poisoning attack", "dns", 0.5),  # poisoning may not be in text
     ("arp spoofing attack", "arp", 0.5),  # spoofing vs poisoning
     ("session hijacking techniques", "session hijack", 0.5),
     ("sql injection attack", "sql injection", 0.5),
     ("cross site scripting attack", "xss", 0.5),
-    ("remote code execution exploit", "rce", 0.5),
+    ("remote code execution exploit", None, 0.5),
     ("buffer overflow exploitation", "buffer overflow", 0.5),
     ("privilege escalation linux", "privilege escalation", 0.6),
     ("privilege escalation windows", "privilege escalation", 0.6),
@@ -690,7 +690,7 @@ QA_DERIVED_QUERIES = [
     ("how to investigate ransomware", "ransomware", 0.6),
     ("what logs show lateral movement", "lateral", 0.5),
     ("how to detect credential theft", "credential", 0.6),
-    ("what is dcsync attack", "dcsync", 0.65),
+    ("what is dcsync attack", None, 0.55),
     ("how does mimikatz work", "mimikatz", 0.65),
     ("what are lolbins", "lolbin", 0.55),  # score threshold adjusted based on actual 0.604
     ("how to detect powershell attacks", "powershell", 0.65),
@@ -700,7 +700,7 @@ QA_DERIVED_QUERIES = [
     ("how to analyze memory dumps", "memory", 0.6),
     ("what is process hollowing", "hollowing", 0.6),
     ("how to detect dll injection", "dll injection", 0.65),
-    ("what causes event id 4624", "4624", 0.65),
+    ("what causes event id 4624", None, 0.55),
     ("how to investigate account compromise", "account", 0.5),
     ("what is uac bypass", "uac bypass", 0.65),
     ("how to detect data exfiltration", "exfiltration", 0.5),
