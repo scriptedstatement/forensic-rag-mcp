@@ -242,6 +242,46 @@ def refresh(
             logger.info(f"  {rel_path}: {message}")
 
     # =========================================================================
+    # Phase 4: Update metadata.json
+    # =========================================================================
+    if not check_only:
+        try:
+            all_meta = collection.get(include=["metadatas"])
+            all_sources: set[str] = set()
+            for meta in all_meta["metadatas"]:
+                if meta and "source" in meta:
+                    all_sources.add(meta["source"])
+
+            record_count = collection.count()
+            metadata_path = data_dir / "metadata.json"
+
+            # Preserve fields from existing metadata
+            existing_metadata: dict[str, Any] = {}
+            if metadata_path.exists():
+                try:
+                    with open(metadata_path, encoding="utf-8") as f:
+                        existing_metadata = json.load(f)
+                except (IOError, json.JSONDecodeError):
+                    pass
+
+            metadata = {
+                "version": existing_metadata.get("version", "2.0.0"),
+                "created": existing_metadata.get("created", datetime.now().isoformat()),
+                "refreshed": datetime.now().isoformat(),
+                "model": existing_metadata.get("model", model_name),
+                "record_count": record_count,
+                "source_count": len(all_sources),
+                "sources": sorted(all_sources)
+            }
+
+            with open(metadata_path, "w", encoding="utf-8") as f:
+                json.dump(metadata, f, indent=2)
+            logger.info(f"  Updated metadata.json: {len(all_sources)} sources, {record_count} records")
+        except Exception as e:
+            result.warnings.append(f"Failed to update metadata.json: {e}")
+            logger.warning(f"  Warning: Could not update metadata.json: {e}")
+
+    # =========================================================================
     # Summary
     # =========================================================================
     logger.info("")
