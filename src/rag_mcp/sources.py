@@ -301,10 +301,18 @@ def get_github_headers() -> dict[str, str]:
 
 
 def _is_ip_literal(hostname: str) -> bool:
-    """Check if hostname is an IP address literal."""
+    """Check if hostname is an IP address literal.
+
+    Also detects octal IP notation (e.g., 0177.0.0.1) which Python's
+    ipaddress module does not parse but could bypass allowlist checks.
+    """
     import ipaddress
+    import re
     if not hostname:
         return False
+    # Detect octal IP notation (e.g., 0177.0.0.1 for 127.0.0.1)
+    if re.match(r'^0\d+\.', hostname):
+        return True
     try:
         ipaddress.ip_address(hostname)
         return True
