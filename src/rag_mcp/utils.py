@@ -11,6 +11,7 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import os
 import re
 from pathlib import Path
 from typing import Any, Optional
@@ -37,7 +38,7 @@ ALLOWED_MODELS = frozenset({
 DEFAULT_MODEL_NAME = "BAAI/bge-base-en-v1.5"
 
 # Search limits
-MAX_TOP_K = 50  # Maximum results to return to user
+MAX_TOP_K = int(os.environ.get("RAG_MAX_TOP_K", "50"))  # Maximum results to return
 MAX_RETRIEVE = 500  # Maximum results to retrieve before filtering
 
 

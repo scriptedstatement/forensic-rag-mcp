@@ -13,6 +13,7 @@ build/
 # Data (users rebuild locally with `python -m rag_mcp.build`)
 # =============================================================================
 data/chroma/
+data/chroma_db/
 data/sources/
 data/*.json
 

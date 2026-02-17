@@ -8,6 +8,9 @@ version = "2.1.0"
 description = "MCP server for IR knowledge base semantic search over 23 authoritative sources"
 readme = "README.md"
 license = "MIT"
+authors = [
+    { name = "AppliedIncidentResponse.com" }
+]
 requires-python = ">=3.10"
 keywords = ["mcp", "rag", "security", "incident-response", "semantic-search"]
 classifiers = [

@@ -221,7 +221,7 @@ Settings are loaded via `Config` dataclass (`config.py`) with an explicit `valid
 | `RAG_MAX_DOWNLOAD_BYTES` | `62914560` (60MB) | Maximum download size for network fetches |
 | `RAG_ALLOW_HTTP` | `false` | Allow HTTP (not recommended; HTTPS enforced by default) |
 | `RAG_FETCH_MAX_RETRIES` | `3` | Max retries for transient network failures |
-| `RAG_MAX_TOP_K` | `100` | Maximum top_k for queries |
+| `RAG_MAX_TOP_K` | `50` | Maximum top_k for queries |
 | `RAG_MAX_QUERY_LENGTH` | `1000` | Maximum query string length |
 | `RAG_LOG_FORMAT` | `text` | Log format: "text" or "json" |
 

@@ -73,4 +73,4 @@ FORBIDDEN_PATHS = frozenset([
 ])
 
 # Minimum path depth required for deletion (prevents deleting shallow paths)
-MIN_DELETE_DEPTH = 3  # e.g., /home/user/projects/rag-mcp/data/chroma = depth 6
+MIN_DELETE_DEPTH = 3  # e.g., /path/to/project/data/chroma = depth 6
