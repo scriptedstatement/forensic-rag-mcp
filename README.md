@@ -502,7 +502,7 @@ If network access is required, place behind an authenticated reverse proxy with 
 
 ## Acknowledgments
 
-Development assisted by Claude (Anthropic).
+Architecture and direction by Steve Anson. Implementation by Claude Code (Anthropic).
 
 ## License
 
