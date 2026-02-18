@@ -11,8 +11,8 @@ This MCP is designed as a component of the [Claude-IR](https://github.com/script
 ```bash
 git clone https://github.com/scriptedstatement/claude-ir.git
 cd claude-ir
+./setup.sh
 claude
-# Then type: read and follow docs/SETUP_GUIDE.md
 ```
 
 **Benefits of Claude-IR installation:**
