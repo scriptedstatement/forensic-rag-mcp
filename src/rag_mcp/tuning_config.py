@@ -19,6 +19,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional
 
+from .utils import atomic_write_json
+
 logger = logging.getLogger(__name__)
 
 # Default config location
@@ -174,10 +176,11 @@ def load_tuning_config(config_path: Optional[Path] = None) -> TuningConfig:
         # Handle version compatibility
         version = data.get("version", "1.0")
 
+        defaults = TuningConfig()
         config = TuningConfig(
             version=version,
-            thresholds=data.get("thresholds", TuningConfig().thresholds),
-            source_boosts=data.get("source_boosts", TuningConfig().source_boosts),
+            thresholds=data.get("thresholds", defaults.thresholds),
+            source_boosts=data.get("source_boosts", defaults.source_boosts),
             keyword_boost=data.get("keyword_boost", 1.15),
             low_score_threshold=data.get("low_score_threshold", 0.50),
             weak_mitre_threshold=data.get("weak_mitre_threshold", 0.60),
@@ -208,8 +211,6 @@ def save_tuning_config(
     path.parent.mkdir(parents=True, exist_ok=True)
 
     data = asdict(config)
-
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2)
+    atomic_write_json(path, data)
 
     logger.info(f"Saved tuning config to {path}")

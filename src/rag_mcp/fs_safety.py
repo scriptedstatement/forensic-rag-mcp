@@ -130,9 +130,7 @@ def is_forbidden_path(path: Path) -> bool:
         True if path is forbidden
     """
     resolved = resolve_strict(path)
-    return resolved in FORBIDDEN_PATHS or any(
-        resolved == forbidden for forbidden in FORBIDDEN_PATHS
-    )
+    return resolved in FORBIDDEN_PATHS
 
 
 def require_within_root(

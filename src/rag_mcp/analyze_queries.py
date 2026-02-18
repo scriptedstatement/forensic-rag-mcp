@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 from collections import defaultdict
@@ -156,8 +157,9 @@ def parse_log_line(line: str) -> Optional[dict[str, Any]]:
         data_str = parts[-1].strip()
         result = {}
 
-        # Handle query= specially since it may contain spaces
-        query_match = re.search(r"query=(['\"])(.+?)\1$", data_str)
+        # Handle query= specially since it may contain spaces or mixed quotes
+        query_match = re.search(r"query=(['\"])(.+?)\1$", data_str) or \
+                      re.search(r"query=(.+)$", data_str)
         if query_match:
             result["query"] = query_match.group(2)
             data_str = data_str[:query_match.start()].strip()
@@ -512,7 +514,7 @@ def interactive_approval(
                 break
             elif response in ("q", "quit"):
                 print("  -> Stopping approval process")
-                skipped += len(actionable) - i + 1
+                skipped += len(actionable) - i
                 return approved, skipped
             else:
                 print("  Please enter Y, N, or Q")
@@ -576,6 +578,8 @@ Examples:
                 since = timedelta(hours=value)
             elif unit == "m":
                 since = timedelta(minutes=value)
+        else:
+            print(f"WARNING: Invalid --since format '{args.since}'. Expected: <number><d|h|m> (e.g., 7d, 24h, 30m)", file=sys.stderr)
 
     # Load current config
     config = load_tuning_config()
@@ -627,8 +631,24 @@ Examples:
                 for r in result.recommendations
             ],
         }
-        with open(args.export, "w", encoding="utf-8") as f:
-            json.dump(export_data, f, indent=2)
+        import tempfile as _tempfile
+        export_path = Path(args.export)
+        export_path.parent.mkdir(parents=True, exist_ok=True)
+        fd, tmp_path = _tempfile.mkstemp(
+            dir=export_path.parent,
+            prefix=f".{export_path.name}.",
+            suffix=".tmp"
+        )
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8") as f:
+                json.dump(export_data, f, indent=2)
+            os.replace(tmp_path, str(export_path))
+        except Exception:
+            try:
+                os.unlink(tmp_path)
+            except OSError:
+                pass
+            raise
         print(f"\nAnalysis exported to {args.export}")
 
     # Interactive approval

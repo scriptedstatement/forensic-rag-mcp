@@ -164,6 +164,9 @@ def scan_knowledge_folder(
 
     for path in folder.rglob("*"):
         if path.is_file():
+            # Skip symlinks (could escape knowledge/ directory)
+            if path.is_symlink():
+                continue
             # Skip hidden files (e.g., .gitkeep, .bundled)
             if path.name.startswith("."):
                 continue
@@ -419,6 +422,9 @@ def process_document(path: Path, source_prefix: str = "user") -> IngestResult:
         return IngestResult(path=str(path), status="error", message=message)
 
     try:
+        # Security: Check file size before reading
+        _validate_file_size(path)
+
         ext = path.suffix.lower()
 
         if ext == ".jsonl":

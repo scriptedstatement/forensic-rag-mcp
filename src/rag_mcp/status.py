@@ -104,10 +104,13 @@ def get_status(
 
     # Load metadata
     if metadata_path.exists():
-        with open(metadata_path, encoding="utf-8") as f:
-            metadata = json.load(f)
-            result.model = metadata.get("model", "unknown")
-            result.source_count = metadata.get("source_count", 0)
+        try:
+            with open(metadata_path, encoding="utf-8") as f:
+                metadata = json.load(f)
+                result.model = metadata.get("model", "unknown")
+                result.source_count = metadata.get("source_count", 0)
+        except (json.JSONDecodeError, IOError) as e:
+            result.warnings.append(f"Could not read metadata.json: {e}")
 
     # Get document count from ChromaDB
     try:

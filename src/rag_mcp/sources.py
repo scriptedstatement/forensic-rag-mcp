@@ -2214,11 +2214,24 @@ Tags: {', '.join(tags) if tags else 'None'}
 
 
 def _write_jsonl(records: list[dict], output_path: Path) -> None:
-    """Write records to JSONL file."""
+    """Write records to JSONL file (atomic: tmpfile + rename)."""
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(output_path, "w", encoding="utf-8") as f:
-        for rec in records:
-            f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+    fd, tmp_path = tempfile.mkstemp(
+        dir=output_path.parent,
+        prefix=f".{output_path.name}.",
+        suffix=".tmp"
+    )
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            for rec in records:
+                f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+        os.replace(tmp_path, output_path)
+    except Exception:
+        try:
+            os.unlink(tmp_path)
+        except OSError:
+            pass
+        raise
 
 
 def parse_forensic_clarifications(repo_dir: Path, output_path: Path) -> int:

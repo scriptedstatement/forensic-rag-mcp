@@ -39,7 +39,7 @@ from .ingest import (
     save_user_state,
     scan_knowledge_folder,
 )
-from .utils import compute_file_hash, load_jsonl_records, sanitize_metadata
+from .utils import DEFAULT_MODEL_NAME, compute_file_hash, load_jsonl_records, sanitize_metadata
 
 logging.basicConfig(
     level=logging.INFO,
@@ -50,7 +50,6 @@ logger = logging.getLogger(__name__)
 
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 DEFAULT_DATA_DIR = PROJECT_ROOT / "data"
-DEFAULT_MODEL_NAME = "BAAI/bge-base-en-v1.5"
 
 
 @dataclass
