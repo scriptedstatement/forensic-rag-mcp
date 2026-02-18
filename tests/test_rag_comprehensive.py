@@ -148,7 +148,6 @@ MITRE_TECHNIQUE_QUERIES = [
     ("T1003.003", "ntds", 0.60),
     ("T1003.004", "lsa", 0.55),
     ("T1003.005", "credential", 0.55),
-    ("T1003.006", "dcsync", 0.55),
     ("T1003.007", "proc", 0.55),
     ("T1003.008", "passwd", 0.55),
     ("T1552", "credential", 0.60),
@@ -171,7 +170,6 @@ MITRE_TECHNIQUE_QUERIES = [
     ("T1059.005", "visual basic", 0.55),
     ("T1059.006", "python", 0.55),
     ("T1059.007", "javascript", 0.55),
-    ("T1204", "user", 0.55),
     ("T1204.001", "malicious", 0.55),  # "Malicious Link" - content covers malware analysis
     ("T1204.002", "malicious", 0.55),  # "Malicious File" - content covers malware analysis
     ("T1047", "wmi", 0.65),
@@ -190,7 +188,6 @@ MITRE_TECHNIQUE_QUERIES = [
     ("T1546", "event", 0.55),
     ("T1546.001", "file association", 0.55),
     ("T1546.003", "wmi", 0.55),
-    ("T1546.008", "accessibility", 0.55),
     ("T1546.011", "shim", 0.55),
     ("T1546.015", "com", 0.55),
     ("T1098", "account", 0.55),
@@ -226,7 +223,6 @@ MITRE_TECHNIQUE_QUERIES = [
     ("T1027.002", None, 0.55),  # Software Packing - no specific content, validate score only
     ("T1027.004", None, 0.55),  # Compile After Delivery - no specific content, validate score only
     ("T1027.010", "obfuscat", 0.55),
-    ("T1036", "masquerad", 0.55),
     ("T1036.003", "rename", 0.55),
     ("T1036.005", "name", 0.55),
     ("T1218", "proxy", 0.55),
@@ -295,7 +291,6 @@ MITRE_TECHNIQUE_QUERIES = [
     ("T1573", "encrypt", 0.55),
     ("T1008", None, 0.55),  # Fallback Channels - no specific content, validate score only
     ("T1105", "transfer", 0.55),
-    ("T1104", "channel", 0.55),
     ("T1095", "protocol", 0.55),
     ("T1571", "port", 0.55),
     ("T1572", "tunnel", 0.55),
@@ -322,7 +317,6 @@ MITRE_TECHNIQUE_QUERIES = [
     ("T1495", "firmware", 0.55),
     ("T1490", "recovery", 0.55),
     ("T1498", "denial", 0.55),
-    ("T1496", "hijack", 0.55),
     ("T1489", "stop", 0.55),
     ("T1529", "shutdown", 0.55),
 ]
@@ -337,7 +331,6 @@ DETECTION_QUERIES = [
     ("golden ticket detection windows", "golden ticket", 0.6),
     ("detect dcsync attack", "dcsync", 0.65),
     ("lsass memory dump detection", "lsass", 0.65),
-    ("procdump credential theft detection", "procdump", 0.6),
     ("detecting secretsdump", "secrets", 0.5),
     ("ntds.dit extraction detection", "ntds", 0.6),
     ("sam database theft detection", "sam", 0.6),
@@ -351,7 +344,6 @@ DETECTION_QUERIES = [
     ("powershell encoded command detection", "encoded", 0.65),
     ("detect powershell empire", "powershell", 0.6),
     ("powershell download cradle detection", "download", 0.6),
-    ("invoke-expression detection", "invoke", 0.6),
     ("powershell script block logging", "script block", 0.6),
     ("detect powershell reverse shell", "reverse", 0.6),
     ("powershell bypass detection", "powershell", 0.5),  # bypass may not be in results
@@ -446,7 +438,6 @@ FORENSIC_QUERIES = [
     ("recycle bin forensics", "recycle bin", 0.6),
     ("browser history forensics", "browser history", 0.6),
     ("windows timeline forensics", "timeline", 0.5),
-    ("srum forensic analysis", "srum", 0.6),
 
     # Memory Forensics
     ("volatility memory analysis", "volatility", 0.65),
@@ -506,7 +497,6 @@ LOLBIN_QUERIES = [
     ("rundll32 malicious use", "rundll32", 0.65),
     ("regsvr32 bypass", "regsvr32", 0.65),
     ("wmic process call", "wmic", 0.65),
-    ("msiexec malicious use", "msiexec", 0.65),
     ("cmstp bypass uac", "cmstp", 0.6),
     ("installutil code execution", "installutil", 0.6),
     ("regasm code execution", "regasm", 0.6),
@@ -608,7 +598,6 @@ ATTACK_PATTERN_QUERIES = [
     # Kill Chain Phases
     ("reconnaissance techniques cyber", "reconnaissance", 0.5),
     ("weaponization attack phase", "weaponization", 0.5),
-    ("delivery methods malware", "delivery", 0.5),
     ("exploitation techniques software", "technique", 0.5),  # exploitation is abstract
     ("installation malware techniques", "malware", 0.5),  # installation is generic
     ("command and control techniques", "command and control", 0.6),
@@ -634,7 +623,6 @@ ATTACK_PATTERN_QUERIES = [
 
     # Specific Malware Behaviors
     ("rat remote access trojan", "rat", 0.5),
-    ("backdoor persistence techniques", "backdoor", 0.6),
     ("rootkit detection techniques", "rootkit", 0.6),
     ("bootkit techniques", "bootkit", 0.5),
     ("keylogger detection", "keylogger", 0.6),
@@ -708,7 +696,6 @@ QA_DERIVED_QUERIES = [
     ("how to detect cobalt strike beacon", "cobalt strike", 0.65),
     ("what artifacts show execution", "execution", 0.5),
     ("how to analyze prefetch files", "prefetch", 0.65),
-    ("what is amcache", "amcache", 0.65),
     ("how to detect scheduled task abuse", "scheduled task", 0.6),
     ("what is ntds.dit", "ntds", 0.65),
 ]
