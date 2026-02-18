@@ -2,8 +2,6 @@
 
 MCP server providing semantic search over incident response knowledge from 23 authoritative security sources.
 
-> **Note:** This is a proof-of-concept project for exploring AI-assisted incident response capabilities. Not intended for production use without additional validation and hardening appropriate to your environment.
-
 ## Installation Options
 
 ### Option A: As Part of Claude-IR (Recommended)
@@ -132,6 +130,17 @@ python -m rag_mcp.status --json
 # Skip update checks (faster)
 python -m rag_mcp.status --no-check
 ```
+
+## Bundled Reference Content
+
+The `knowledge/` folder ships with JSONL extractions from two reference sources, included with permission:
+
+| Source | Original Location |
+|--------|-------------------|
+| **SANS Posters** | https://www.sans.org/posters |
+| **Applied Incident Response** | https://www.appliedincidentresponse.com/resources |
+
+These are indexed automatically during `rag_mcp.build`. To build without bundled content, use `--no-bundled`.
 
 ## User Documents
 
