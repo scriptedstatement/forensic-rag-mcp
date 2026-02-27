@@ -1,3 +1,12 @@
+> [!IMPORTANT]
+> **This repository has been retired.** It is no longer maintained.
+>
+> This package is now part of the **[AppliedIR/sift-mcp](https://github.com/AppliedIR/sift-mcp)** monorepo.
+>
+> Documentation: [appliedir.github.io/aiir](https://appliedir.github.io/aiir/)
+
+---
+
 # RAG-MCP: Incident Response Knowledge Server
 
 MCP server providing semantic search over incident response knowledge from 23 authoritative security sources.
